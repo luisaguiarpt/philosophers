@@ -9,13 +9,36 @@ The philosophers either manage to eat a set amount of meals and the simulation e
 For this program, we must have one single process and several threads, each representing a philosopher's routine. (The bonus part of this project uses child processes to represent each of the philosophers).
 
 ## Concepts
+* Threads
+
+A thread is a unit of processing that is lightweight (when compared to a fork). It uses the same memory as the thread that called it, and most of the same resources.
+
+While this is good to save in CPU usage, it brings up several challanges when it comes to shared memory access.
+
+* Data race
+
+What if you have two threads trying to access the same shared resource at the same time?
+
+You get a data race: both threads are racing to see who can get there first, and they both do.
+
+And then there's undefined behaviour, maybe they both want to read a value, and everything is ok.
+
+Maybe they need to read an int and add 1 to it's value and then write it. They read 3 at the same time, add 1, and they both write 4.
+Whereas what you really wanted was 5.
+
+Maybe you're reading while someone is writing, and the value is changed mid read, so you get garbage.
+
+These are data races, and they are preventable using mutexes.
+
 * Mutexes
 
-Mutex (**Mut**ual **ex**clusion), is a sort of lock, that allows only one thread to access a piece of shared at a time.
+Mutex (**Mut**ual **ex**clusion), is a sort of lock, that allows only one thread to access a piece of shared memory at a time.
 
 I like to think of it as a lock to a door. (lock -> mutex; door -> function; room -> shared memory)
 
-If a thread wants to access this room, the door must be unlocked, and once it goes into the room, it has to lock it, until it's done with it, leaving it as it was, unlocked.
+If a thread wants to access this room, the door must be unlocked to begin with, otherwise that means that someone else is inside. If that's the case, you wait (good).
+This is the tricky bit, before entering the room, you must first lock the door, and only then can you access it. (The analogy falls apart a bit here, but that's ok).
+Then, after you leave the room, you unlock the door again, so other people can go into it.
 
 There is a catch, however. What if there's another door to the room?
 
@@ -23,4 +46,7 @@ In that case, even if the door is locked, someone may be able to enter through t
 
 That's why mutexes are good, but only if your code doesn't have any backdoors (no pun).
 
-That's why: `var x` (in shared memory) is accessible only after locking it with a `mutex_for_x`.
+That's why you must make sure that to access `var x` (in shared memory), you can only do it after locking it with a `mutex_for_x`.
+This isn't done automatically, you must guarantee that all access to the shared resource (doesn't matter how many doors), is guarded by the same lock (only one).
+
+To summarize: for shared resource x, you must lock it with a mutex in order to access it. You can access it via multiple places, but they must all use the same mutex.
