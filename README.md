@@ -19,12 +19,15 @@ While this is good to save in CPU usage, it brings up several challanges when it
 
 What if you have two threads trying to access the same shared resource at the same time?
 
-You get a data race: both threads are racing to see who can get there first, and they both do.
+A data race occurs when two or more threads access the same memory concurrently, at least one access is a write, and there's no synchronization to prevent it.
 
-And then there's undefined behaviour, maybe they both want to read a value, and everything is ok.
+And then there's undefined behaviour.
 
-Maybe they need to read an int and add 1 to it's value and then write it. They read 3 at the same time, add 1, and they both write 4.
-Whereas what you really wanted was 5.
+Maybe they both want to read a value, and everything is ok. (only ok if no one is writing)
+
+Maybe they need to read an int and add 1 to it's value and then write it.
+- They read x == 3 at the same time, add x + 1 == 4, and they both write 4.
+Whereas what you really wanted was 5. This is called a **lost update**.
 
 Maybe you're reading while someone is writing, and the value is changed mid read, so you get garbage.
 
