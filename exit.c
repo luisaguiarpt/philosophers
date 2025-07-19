@@ -1,0 +1,12 @@
+#include "philo.h"
+
+void	exit_error(t_exit_status err)
+{
+	if (err == NOARGS || err == XSARGS)
+	{
+		printf("Incorrect input.\n");
+		printf("Usage: \"./philo nbr_of_philos time_to_die 
+				time_to_eat time_to_sleep [meal_limit]\"");
+		exit(NOARGS);
+	}
+}
