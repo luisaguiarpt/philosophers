@@ -24,10 +24,11 @@ typedef struct s_table
 
 typedef struct s_philo
 {
-	pthread_t	tid;
-	int			last_meal_end;
-	bool		dead;
-	t_table		*table;
+	pthread_t		tid;
+	pthread_mutex_t	mtxid;
+	int				last_meal_end;
+	bool			dead;
+	t_table			*table;
 }				t_philo;
 
 typedef enum e_exit_status

@@ -18,6 +18,7 @@ void	init_philos(t_table *table)
 		}
 		table->philo[i]->dead = false;
 		table->philo[i]->table = table;
+		pthread_mutex_init(table->philo[i]->mtxid, NULL);
 		printf("Created philo %d\n", i);
 	}
 }

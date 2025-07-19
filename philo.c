@@ -12,5 +12,11 @@ int	main(int ac, char **av)
 
 void	start_dinner(t_table *table)
 {
-	
+	int	i;
+
+	i = -1;
+	while (++i < table->nbr_philos)
+	{
+
+	}
 }
