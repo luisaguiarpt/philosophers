@@ -9,13 +9,35 @@ The philosophers either manage to eat a set amount of meals and the simulation e
 For this program, we must have one single process and several threads, each representing a philosopher's routine. (The bonus part of this project uses child processes to represent each of the philosophers).
 
 ## Concepts
-* Threads
+#### Threads
 
 A thread is a unit of processing that is lightweight (when compared to a fork). It uses the same memory as the thread that called it, and most of the same resources.
 
 While this is good to save in CPU usage, it brings up several challanges when it comes to shared memory access.
 
-* Data race
+We must include the `<pthread.h>` header.
+
+To create a thread we use the function:
+
+```c
+int pthread_create(pthread_t *thread, const pthread_attr_t *attr, (void *)start_routine, void *arg);
+```
+Where `thread` is a variable that holds the id of the thread, which will be used in other functions that deal with threads.
+`attr` isn't available in the scope of this project.
+`start_routine` is the function on which the thread will start execution.
+`arg` is a pointer to the argument used in the `start_routine` function.
+
+To be done with a thread, we have the option to use `pthread_detach()` and `pthread_join()`.
+
+The join function will wait for the thread to finish execution (e.g.: return), and retrieve it's return value.
+
+The detach function is more useful when you don't care about the return value of the thread.
+
+Both functions will clean up the resources when the thread finishes executing.
+
+Not using any of these functions results in leaks.
+
+#### Data race
 
 What if you have two threads trying to access the same shared resource at the same time?
 
@@ -33,7 +55,7 @@ Maybe you're reading while someone is writing, and the value is changed mid read
 
 These are data races, and they are preventable using mutexes.
 
-* Mutexes
+#### Mutexes
 
 Mutex (**Mut**ual **ex**clusion), is a sort of lock, that allows only one thread to access a piece of shared memory at a time.
 
