@@ -8,6 +8,9 @@
 # include <unistd.h>	// write, usleep
 # include <sys/time.h>	// gettimeofday
 # include <stdbool.h>	// booleans
+# include <limits.h>
+
+typedef struct s_philo	t_philo;
 
 typedef struct s_table
 {
@@ -16,15 +19,15 @@ typedef struct s_table
 	int		time_to_die;
 	int		time_to_sleep;
 	int		meal_limit;
-	s_philo	**philos;
+	t_philo	**philo;
 }				t_table;
 
 typedef struct s_philo
 {
-	int		last_meal;
-	int		time_to_die;
-	int		time_to_sleep;
-	bool	dead;
+	pthread_t	tid;
+	int			last_meal_end;
+	bool		dead;
+	t_table		*table;
 }				t_philo;
 
 typedef enum e_exit_status
@@ -32,6 +35,21 @@ typedef enum e_exit_status
 	SUCCESS,
 	NOARGS,
 	XSARGS,
-	INV_VALUE
+	INV_VALUE,
+	CALLOCFAIL
 }				t_exit_status;
+
+// Initializers - init.c
+void	init_philos(t_table *table);
+
+// Parsing - parse.c
+void	parse(t_table *table, int ac, char **av);
+
+// Exit - exit.c
+void	exit_error(t_exit_status err);
+
+// Utilities - utils.c
+void	*ft_calloc(size_t nmemb, size_t size);
+void	free_philos(t_philo **tab);
+
 #endif
