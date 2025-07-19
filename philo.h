@@ -31,6 +31,7 @@ typedef enum e_exit_status
 {
 	SUCCESS,
 	NOARGS,
-	XSARGS
+	XSARGS,
+	INV_VALUE
 }				t_exit_status;
 #endif

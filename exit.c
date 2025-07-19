@@ -9,4 +9,9 @@ void	exit_error(t_exit_status err)
 				time_to_eat time_to_sleep [meal_limit]\"");
 		exit(NOARGS);
 	}
+	if (err == INV_INPUT)
+	{
+		printf("Invalid value passed in input.\n");
+		exit(INV_VALUE);
+	}
 }
