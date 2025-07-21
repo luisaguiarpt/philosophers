@@ -21,16 +21,40 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (ptr);
 }
 
-void	free_philos(t_philo **tab)
+void	free_philos(t_table *t)
 {
-	int	i;
+	int		i;
+	t_philo	**tab;
 
+	tab = t->philos;
 	i = 0;
-	while (tab[i])
+	while (tab && tab[i])
 	{
 		free(tab[i]);
+		tab[i] = NULL;
 		i++;
 	}
-	free(tab[i]);
-	free(tab);
+	if (tab && tab[i])
+		free(tab[i]);
+	if (tab)
+		free(tab);
+}
+
+void	free_forks(t_table *t)
+{
+	int		i;
+	t_fork	**tab;
+
+	tab = t->forks;
+	i = 0;
+	while (tab && tab[i])
+	{
+		free(tab[i]);
+		tab[i] = NULL;
+		i++;
+	}
+	if (tab && tab[i])
+		free(tab[i]);
+	if (tab)
+		free(tab);
 }

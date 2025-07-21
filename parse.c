@@ -3,25 +3,25 @@
 static char	*get_sign(char *str, int *sign);
 static int	safe_atoi(char *str, int *result);
 
-void	parse(t_table *table, int ac, char **av)
+void	parse(t_table *t, int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
-		exit_error(NOARGS);
-	if (!safe_atoi(av[1], &table->nbr_philos))
-		exit_error(INV_VALUE);
-	if (!safe_atoi(av[2], &table->time_to_die))
-		exit_error(INV_VALUE);
-	if (!safe_atoi(av[3], &table->time_to_eat))
-		exit_error(INV_VALUE);
-	if (!safe_atoi(av[4], &table->time_to_sleep))
-		exit_error(INV_VALUE);
+		exit_error(t, NOARGS);
+	if (!safe_atoi(av[1], &t->nbr_philos))
+		exit_error(t, INV_VALUE);
+	if (!safe_atoi(av[2], &t->time_to_die))
+		exit_error(t, INV_VALUE);
+	if (!safe_atoi(av[3], &t->time_to_eat))
+		exit_error(t, INV_VALUE);
+	if (!safe_atoi(av[4], &t->time_to_sleep))
+		exit_error(t, INV_VALUE);
 	if (ac == 6)
 	{
-		if (!safe_atoi(av[5], &table->meal_limit))
-			exit_error(INV_VALUE);
+		if (!safe_atoi(av[5], &t->meal_limit))
+			exit_error(t, INV_VALUE);
 	}
 	else
-		table->meal_limit = -1;
+		t->meal_limit = -1;
 }
 
 /* 

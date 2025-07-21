@@ -11,6 +11,7 @@
 # include <limits.h>
 
 typedef struct s_philo	t_philo;
+typedef struct s_fork	t_fork;
 
 typedef struct s_table
 {
@@ -19,17 +20,39 @@ typedef struct s_table
 	int		time_to_die;
 	int		time_to_sleep;
 	int		meal_limit;
-	t_philo	**philo;
+	t_fork	**forks;
+	t_philo	**philos;
 }				t_table;
 
 typedef struct s_philo
 {
+	int				philo_id;
 	pthread_t		tid;
 	pthread_mutex_t	mtxid;
 	int				last_meal_end;
 	bool			dead;
-	t_table			*table;
+	t_fork			*fork1;
+	t_fork			*fork2;
+	t_table			*t;
 }				t_philo;
+
+typedef struct s_fork
+{
+	int				fork_id;
+	pthread_t		tid;
+	pthread_mutex_t	mtxid;
+}				t_fork;
+
+typedef enum e_thread_code
+{
+	CREATE,
+	JOIN,
+	DETACH,
+	INIT,
+	DESTROY,
+	LOCK,
+	UNLOCK
+}				t_thread_code;
 
 typedef enum e_exit_status
 {
@@ -37,20 +60,27 @@ typedef enum e_exit_status
 	NOARGS,
 	XSARGS,
 	INV_VALUE,
-	CALLOCFAIL
+	CALLOCFAIL,
+	PTHREAD_FAIL
 }				t_exit_status;
 
 // Initializers - init.c
+void	init_table(t_table *t, int ac, char **av);
+void	init_forks(t_table *t);
 void	init_philos(t_table *table);
 
 // Parsing - parse.c
 void	parse(t_table *table, int ac, char **av);
 
+// Thread functions - threads.c
+void	mutex_f(t_table *t, pthread_mutex_t *id, t_thread_code code);
+
 // Exit - exit.c
-void	exit_error(t_exit_status err);
+void	exit_error(t_table *t, t_exit_status err);
 
 // Utilities - utils.c
 void	*ft_calloc(size_t nmemb, size_t size);
-void	free_philos(t_philo **tab);
+void	free_forks(t_table *t);
+void	free_philos(t_table *t);
 
 #endif

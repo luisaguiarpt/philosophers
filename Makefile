@@ -6,7 +6,8 @@ SRCS=philo.c \
 	 exit.c \
 	 parse.c \
 	 init.c \
-	 utils.c
+	 utils.c \
+	 threads.c
 
 OBJS=$(SRCS:%.c=%.o)
 

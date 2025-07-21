@@ -4,10 +4,9 @@ int	main(int ac, char **av)
 {
 	t_table	table;
 
-	parse(&table, ac, av);
-	init_philos(&table);
-	start_dinner(&table);
-	free_philos(table.philo);
+	init_table(&table, ac, av);
+	free_forks(&table);
+	free_philos(&table);
 }
 
 void	start_dinner(t_table *table)

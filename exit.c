@@ -1,22 +1,20 @@
 #include "philo.h"
 
-void	exit_error(t_exit_status err)
+void	exit_error(t_table *t, t_exit_status err)
 {
 	if (err == NOARGS || err == XSARGS)
 	{
 		printf("Incorrect input.\n");
-		printf("Usage: \"./philo nbr_of_philos time_to_die \
-				time_to_eat time_to_sleep [meal_limit]\"");
-		exit(NOARGS);
+		printf("Usage: \"./philo nbr_of_philos time_to_die"); 
+		printf(" time_to_eat time_to_sleep [meal_limit]\"\n");
 	}
-	if (err == INV_VALUE)
-	{
+	else if (err == INV_VALUE)
 		printf("Invalid value passed in input.\n");
-		exit(INV_VALUE);
-	}
-	if (err == CALLOCFAIL)
-	{
+	else if (err == CALLOCFAIL)
 		printf("Calloc failed.\n");
-		exit(CALLOCFAIL);
-	}
+	else if (err == PTHREAD_FAIL)
+		printf("Wrong mutex code passed\n");
+	free_forks(t);
+	free_philos(t);
+	exit(err);
 }
