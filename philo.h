@@ -15,21 +15,25 @@ typedef struct s_fork	t_fork;
 
 typedef struct s_table
 {
-	int		nbr_philos;
-	int		time_to_eat;
-	int		time_to_die;
-	int		time_to_sleep;
-	int		meal_limit;
-	t_fork	**forks;
-	t_philo	**philos;
+	int				nbr_philos;
+	int				time_to_eat;
+	int				time_to_die;
+	int				time_to_sleep;
+	int				meal_limit;
+	bool			dinner_on;
+	struct timeval	start_time;
+	pthread_mutex_t	mtxid;
+	t_fork			**forks;
+	t_philo			**philos;
 }				t_table;
 
 typedef struct s_philo
 {
-	int				philo_id;
+	int				id;
 	pthread_t		tid;
 	pthread_mutex_t	mtxid;
-	int				last_meal_end;
+	suseconds_t		start_time;
+	suseconds_t		last_meal_end;
 	bool			dead;
 	t_fork			*fork1;
 	t_fork			*fork2;
@@ -61,13 +65,34 @@ typedef enum e_exit_status
 	XSARGS,
 	INV_VALUE,
 	CALLOCFAIL,
-	PTHREAD_FAIL
+	PTHREAD_FAIL,
+	TIME_FAIL
 }				t_exit_status;
+
+// Main - philo.c
+void	start_dinner(t_table *t);
+void	*check_life(void *table);
+void	*eat_sleep_think_repeat(void *philo);
+void	sleepy(t_philo *p);
+void	eat(t_philo *p);
+void	pickup_fork(t_philo *p, int f);
+void	putdown_fork(t_philo *p, int f);
 
 // Initializers - init.c
 void	init_table(t_table *t, int ac, char **av);
 void	init_forks(t_table *t);
 void	init_philos(t_table *table);
+void	init_philo_thread(t_table *t, pthread_t *tid, t_philo *p);
+
+// Setters - setters.c
+void	set_start_time(t_table *t);
+void	set_dinner_on(t_table *t);
+void	set_dinner_off(t_table *t);
+void	set_last_meal_time(t_philo *p);
+
+// Getters - getters.c
+suseconds_t	get_start_time(t_table *t);
+bool		get_dinner_status(t_table *t);
 
 // Parsing - parse.c
 void	parse(t_table *table, int ac, char **av);
