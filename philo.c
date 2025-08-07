@@ -24,7 +24,6 @@ void	start_dinner(t_table *t)
 void	*check_life(void *table)
 {
 	int				i;
-	struct timeval	curr;
 	suseconds_t		elapsed;
 	t_table			*t;
 
@@ -34,10 +33,9 @@ void	*check_life(void *table)
 		i = -1;
 		while (get_dinner_status(t) && ++i < t->nbr_philos)
 		{
-			gettimeofday(&curr, NULL);
-			if (curr.tv_usec - t->philos[i]->last_meal_end > t->time_to_die)
+			elapsed = get_elapsed(t);
+			if (elapsed - t->philos[i]->last_meal_end > t->time_to_die)
 			{
-				elapsed = curr.tv_usec - t->start_time.tv_usec;
 				printf("%lu %d has died\n", elapsed, i + 1);
 				set_dinner_off(t);
 			}
@@ -67,49 +65,45 @@ void	*eat_sleep_think_repeat(void *philo)
 
 void	sleepy(t_philo *p)
 {
-	struct timeval	curr;
-	suseconds_t		elapsed;
+	long int		elapsed;
 
-	gettimeofday(&curr, NULL);
-	elapsed = curr.tv_usec - p->start_time;
+	elapsed = get_elapsed(p->t);
 	printf("%lu %d is sleeping\n", elapsed, p->id);
-	usleep(p->t->time_to_sleep);
+	usleep(p->t->time_to_sleep * 1000);
+	elapsed = get_elapsed(p->t);
 	printf("%lu %d is thinking\n", elapsed, p->id);
 }
 
 void	eat(t_philo *p)
 {
-	struct timeval	tv;
-	suseconds_t		elapsed;
+	long int		elapsed;
 
-	gettimeofday(&tv, NULL);
-	elapsed = tv.tv_usec - p->start_time;
+	elapsed = get_elapsed(p->t);
 	printf("%lu %d is eating\n", elapsed, p->id);
-	usleep(p->t->time_to_eat);
+	usleep(p->t->time_to_eat * 1000);
 	set_last_meal_time(p);
 }
 
 void	pickup_fork(t_philo *p, int f)
 {
-	struct timeval	tv;
-	suseconds_t		elapsed;
+	long int	elapsed;
 
-	gettimeofday(&tv, NULL);
-	elapsed = tv.tv_usec - p->start_time;
 	if (f == 1)
 		pthread_mutex_lock(&p->fork1->mtxid);
 	else
 		pthread_mutex_lock(&p->fork2->mtxid);
+	elapsed = get_elapsed(p->t);
 	printf("%lu %d has taken a fork\n", elapsed, p->id);
 }
 
 void	putdown_fork(t_philo *p, int f)
 {
-	struct timeval	tv;
+	long int	elapsed;
 
-	gettimeofday(&tv, NULL);
 	if (f == 1)
 		pthread_mutex_unlock(&p->fork1->mtxid);
 	else
 		pthread_mutex_unlock(&p->fork2->mtxid);
+	elapsed = get_elapsed(p->t);
+	printf("%lu %d has put down a fork\n", elapsed, p->id);
 }

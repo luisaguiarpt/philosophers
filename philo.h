@@ -21,7 +21,7 @@ typedef struct s_table
 	int				time_to_sleep;
 	int				meal_limit;
 	bool			dinner_on;
-	struct timeval	start_time;
+	long int		start_time;
 	pthread_mutex_t	mtxid;
 	t_fork			**forks;
 	t_philo			**philos;
@@ -32,8 +32,8 @@ typedef struct s_philo
 	int				id;
 	pthread_t		tid;
 	pthread_mutex_t	mtxid;
-	suseconds_t		start_time;
-	suseconds_t		last_meal_end;
+	long int		start_time;
+	long int		last_meal_end;
 	bool			dead;
 	t_fork			*fork1;
 	t_fork			*fork2;
@@ -93,6 +93,8 @@ void	set_last_meal_time(t_philo *p);
 // Getters - getters.c
 suseconds_t	get_start_time(t_table *t);
 bool		get_dinner_status(t_table *t);
+long int	get_milliseconds(struct timeval tv);
+long int	get_elapsed(t_table *t);
 
 // Parsing - parse.c
 void	parse(t_table *table, int ac, char **av);

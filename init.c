@@ -5,6 +5,7 @@ void	init_table(t_table *t, int ac, char **av)
 	t->forks = NULL;
 	t->philos = NULL;
 	t->dinner_on = 0;
+	mutex_f(t, &t->mtxid, INIT);
 	set_start_time(t);
 	parse(t, ac, av);
 	init_forks(t);
@@ -54,7 +55,7 @@ void	init_philos(t_table *t)
 		t->philos[i]->fork1 = t->forks[((i + 1) % 2 + i) % t->nbr_philos];
 		t->philos[i]->fork2 = t->forks[(i % 2) + i];
 		mutex_f(t, &t->philos[i]->mtxid, INIT);
-		t->philos[i]->start_time = get_start_time(t);
+		set_last_meal_time(t->philos[i]);
 		init_philo_thread(t, &t->philos[i]->tid, t->philos[i]);
 		//printf("Created philo %d\n", i);
 		//printf("Philo %d has fork %d and %d\n", t->philos[i]->id, t->philos[i]->fork1->fork_id, 

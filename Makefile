@@ -1,5 +1,5 @@
 CC=cc
-FLAGS=-Wall -Wextra -Werror -pthread -g
+FLAGS=-Wall -Wextra -Werror -fsanitize=thread -pthread -g
 INCL=libft
 
 SRCS=philo.c \
