@@ -1,6 +1,5 @@
 CC=cc
 FLAGS=-Wall -Wextra -Werror -fsanitize=thread -pthread -g
-INCL=libft
 
 SRCS=philo.c \
 	 exit.c \
@@ -21,7 +20,7 @@ $(NAME): $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) -o $@
 
 %.o: %.c
-	$(CC) $(FLAGS) -c $< -o $@ -I$(INCL)
+	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
 	rm -rf $(OBJS)
