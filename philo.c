@@ -8,6 +8,7 @@ int	main(int ac, char **av)
 	start_dinner(&table);
 	free_forks(&table);
 	free_philos(&table);
+
 }
 
 void	start_dinner(t_table *t)
@@ -82,18 +83,24 @@ void	eat(t_philo *p)
 	printf("%lu %d is eating\n", elapsed, p->id);
 	usleep(p->t->time_to_eat * 1000);
 	set_last_meal_time(p);
+	p->meals_eaten++;
 }
 
 void	pickup_fork(t_philo *p, int f)
 {
 	long int	elapsed;
+	int			fork_nr;
 
 	if (f == 1)
 		pthread_mutex_lock(&p->fork1->mtxid);
 	else
 		pthread_mutex_lock(&p->fork2->mtxid);
 	elapsed = get_elapsed(p->t);
-	printf("%lu %d has taken a fork\n", elapsed, p->id);
+	if (f == 1)
+		fork_nr = p->fork1->fork_id;
+	else
+		fork_nr = p->fork2->fork_id;
+	printf("%lu %d has taken a fork [%d]\n", elapsed, p->id, fork_nr);
 }
 
 void	putdown_fork(t_philo *p, int f)

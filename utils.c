@@ -34,8 +34,6 @@ void	free_philos(t_table *t)
 		tab[i] = NULL;
 		i++;
 	}
-	if (tab && tab[i])
-		free(tab[i]);
 	if (tab)
 		free(tab);
 }

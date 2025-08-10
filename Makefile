@@ -1,5 +1,5 @@
 CC=cc
-FLAGS=-Wall -Wextra -Werror -fsanitize=thread -pthread -g
+FLAGS=-Wall -Wextra -Werror -pthread -g -fsanitize=thread
 
 SRCS=philo.c \
 	 exit.c \

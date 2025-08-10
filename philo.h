@@ -34,6 +34,7 @@ typedef struct s_philo
 	pthread_mutex_t	mtxid;
 	long int		start_time;
 	long int		last_meal_end;
+	int				meals_eaten;
 	bool			dead;
 	t_fork			*fork1;
 	t_fork			*fork2;
@@ -83,6 +84,7 @@ void	init_table(t_table *t, int ac, char **av);
 void	init_forks(t_table *t);
 void	init_philos(t_table *table);
 void	init_philo_thread(t_table *t, pthread_t *tid, t_philo *p);
+void	assign_forks(t_philo *p);
 
 // Setters - setters.c
 void	set_start_time(t_table *t);
