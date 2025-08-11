@@ -4,6 +4,7 @@ void	init_table(t_table *t)
 {
 	t->dinner_on = false;
 	t->meals_finished = 0;
+	t->start_time = 0;
 	mutex_fct(&t->state_mtx, INIT, t);
 	mutex_fct(&t->print_mtx, INIT, t);
 }
@@ -21,6 +22,7 @@ void	init_philos(t_table *t)
 		t->philos[i].meals_eaten = 0;
 		assign_forks(t, i);
 		mutex_fct(&t->philos[i].meal_mtx, INIT, t);
+		init_philo_thread(&t->philos[i]);
 	}
 }
 

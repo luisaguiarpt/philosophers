@@ -6,11 +6,13 @@ CLANGFLAGS=-Wall -Wextra -Werror -pthread -g -fsanitize=thread
 SRCS=philo.c \
 	 parse.c \
 	 exit.c \
-	 debug.c \
 	 time.c \
 	 utils.c \
 	 init.c \
-	 threads.c
+	 threads.c \
+	 getters.c \
+	 setters.c \
+	 printers.c
 
 OBJS=$(SRCS:%.c=%.o)
 

@@ -8,20 +8,44 @@ int	main(int ac, char **av)
 	init_table(&t);
 	init_forks(&t);
 	init_philos(&t);
-	prepare_philos(&t);
+	start_dinner(&t);
+	sleep(10);
 }
 
-void	prepare_philos(t_table *t)
+void	start_dinner(t_table *t)
 {
+	init_monitor_thread(t);
+	t->start_time = get_curr_time_ms();
+}
+
+void	*monitor_life(void *table)
+{
+	t_table	*t;
 	int		i;
 
-	i = -1;
-	t->start_time = get_curr_time_ms();
-	while (++i < t->n_philos)
+	t = (t_table *)table;
+	mutex_fct(&t->print_mtx, LOCK, t);
+	printf("Monitor thread started\n");
+	mutex_fct(&t->print_mtx, UNLOCK, t);
+	while (get_dinner_status(t) && !meals_finished(t))
 	{
-		t->philos[i].last_meal_start = t->start_time;
-		init_philo_thread(&t->philos[i]);
+		i = -1;
+		while (++i < t->n_philos)
+		{
+			if (has_starved(&t->philos[i]))
+				set_dinner_status_off(t);
+			if (get_meals_eaten(&t->philos[i]) >= t->meal_limit)
+				set_dinner_status_off(t);
+		}
 	}
+	return (NULL);
+}
+
+bool	has_starved(t_philo *p)
+{
+	if (get_elapsed_last_meal(p) > get_last_meal_start(p))
+		return (true);
+	return (false);
 }
 
 void	*philo_life(void *philo)
@@ -30,14 +54,55 @@ void	*philo_life(void *philo)
 
 	p = (t_philo *)philo;
 	mutex_fct(&p->t->print_mtx, LOCK, p->t);
-	printf("Philosopher %d is born\n", p->id);
+	printf("philosopher %d is born\n", p->id);
 	mutex_fct(&p->t->print_mtx, UNLOCK, p->t);
-	while (!get_dinner_status(p->t))
+	while (p->t->start_time == 0)
 		usleep(50);
+	p->last_meal_start = p->t->start_time;
 	while (get_dinner_status(p->t) && !meals_finished(p->t))
 	{
-		take_forks(p);
+		pick_up_forks(p);
 		eat(p);
+		put_down_forks(p);
+		sleepy(p);
+		think(p);
 	}
 	return (NULL);
+}
+
+void	sleepy(t_philo *p)
+{
+	print_msg(p, SLEEP);
+	usleep(p->t->time_to_sleep * 1000);
+}
+
+void	think(t_philo *p)
+{
+	print_msg(p, THINK);
+}
+
+void	eat(t_philo *p)
+{
+	print_msg(p, EAT);
+	mutex_fct(&p->meal_mtx, LOCK, p->t);
+	p->last_meal_start = get_curr_time_ms();
+	mutex_fct(&p->meal_mtx, UNLOCK, p->t);
+	usleep(p->t->time_to_eat * 1000	);
+	mutex_fct(&p->meal_mtx, LOCK, p->t);
+	p->meals_eaten++;
+	mutex_fct(&p->meal_mtx, UNLOCK, p->t);
+}
+
+void	pick_up_forks(t_philo *p)
+{
+	mutex_fct(&p->fork1->mtxid, LOCK, p->t);
+	print_msg(p, FORK);
+	mutex_fct(&p->fork2->mtxid, LOCK, p->t);
+	print_msg(p, FORK);
+}
+
+void	put_down_forks(t_philo *p)
+{
+	mutex_fct(&p->fork1->mtxid, UNLOCK, p->t);
+	mutex_fct(&p->fork2->mtxid, UNLOCK, p->t);
 }

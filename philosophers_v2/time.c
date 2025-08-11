@@ -16,11 +16,11 @@ unsigned long get_elapsed(t_table *t)
 	long int	elapsed;
 
 	current = get_curr_time_ms();
-		elapsed = current - t->start_time;
+	elapsed = current - t->start_time;
 	return (elapsed);
 }
 
-unsigned long	get_time_since_last_meal(t_philo *p)
+unsigned long	get_elapsed_last_meal(t_philo *p)
 {
 	unsigned long 	current;
 	unsigned long 	time_since_last_meal;
@@ -30,4 +30,14 @@ unsigned long	get_time_since_last_meal(t_philo *p)
 	time_since_last_meal = current - p->last_meal_start;
 	pthread_mutex_unlock(&p->meal_mtx);
 	return (time_since_last_meal);
+}
+
+unsigned long	get_last_meal_start(t_philo *p)
+{
+	unsigned long	last_meal_start;
+
+	pthread_mutex_lock(&p->meal_mtx);
+	last_meal_start = p->last_meal_start;
+	pthread_mutex_unlock(&p->meal_mtx);
+	return (last_meal_start);
 }

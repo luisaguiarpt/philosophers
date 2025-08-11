@@ -25,3 +25,11 @@ void	init_philo_thread(t_philo *p)
 	if (ret)
 		exit_error(p->t, PTHREAD_PHILO);
 }
+
+void	init_monitor_thread(t_table *t)
+{
+	int	ret;
+	ret = pthread_create(&t->monitor_tid, NULL, monitor_life, t);
+	if (!ret)
+		exit_error(t, PTHREAD_MONITOR);
+}

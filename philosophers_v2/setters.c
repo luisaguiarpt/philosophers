@@ -1,6 +1,8 @@
 #include "philo.h"
 
-void	set_start_time(t_table *t)
+void	set_dinner_status_off(t_table *t)
 {
-	t->start_time = get_time_ms();
+	mutex_fct(&t->state_mtx, LOCK, t);
+	t->dinner_on = false;
+	mutex_fct(&t->state_mtx, UNLOCK, t);
 }
