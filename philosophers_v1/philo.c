@@ -81,8 +81,8 @@ void	eat(t_philo *p)
 
 	elapsed = get_elapsed(p->t);
 	printf("%lu %d is eating\n", elapsed, p->id);
-	usleep(p->t->time_to_eat * 1000);
 	set_last_meal_time(p);
+	usleep(p->t->time_to_eat * 1000);
 	p->meals_eaten++;
 }
 
