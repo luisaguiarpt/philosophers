@@ -97,6 +97,7 @@ void		test_structs(t_table *t);
 void		prepare_philos(t_table *t);
 void		*philo_life(void *philo);
 void		start_dinner(t_table *t);
+void	wait_for_end(t_table *t);
 void		*monitor_life(void *table);
 bool		has_starved(t_philo *p);
 void		*philo_life(void *philo);

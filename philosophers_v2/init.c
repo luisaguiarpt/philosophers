@@ -2,7 +2,7 @@
 
 void	init_table(t_table *t)
 {
-	t->dinner_on = false;
+	t->dinner_on = true;
 	t->meals_finished = 0;
 	t->start_time = 0;
 	mutex_fct(&t->state_mtx, INIT, t);

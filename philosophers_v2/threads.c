@@ -30,6 +30,6 @@ void	init_monitor_thread(t_table *t)
 {
 	int	ret;
 	ret = pthread_create(&t->monitor_tid, NULL, monitor_life, t);
-	if (!ret)
+	if (ret)
 		exit_error(t, PTHREAD_MONITOR);
 }

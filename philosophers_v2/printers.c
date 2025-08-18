@@ -8,7 +8,7 @@ void	print_msg(t_philo *p, t_prt_code code)
 	if (code == SLEEP)
 		printf("[%ld] %d is sleeping\n", get_elapsed(p->t), p->id);
 	if (code == THINK)
-		printf("[%ld] %d is sleeping\n", get_elapsed(p->t), p->id);
+		printf("[%ld] %d is thinking\n", get_elapsed(p->t), p->id);
 	if (code == DIE)
 		printf("[%ld] %d died\n", get_elapsed(p->t), p->id);
 	if (code == FORK)

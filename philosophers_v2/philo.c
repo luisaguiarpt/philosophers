@@ -8,14 +8,27 @@ int	main(int ac, char **av)
 	init_table(&t);
 	init_forks(&t);
 	init_philos(&t);
+	init_monitor_thread(&t);
 	start_dinner(&t);
-	sleep(10);
 }
 
 void	start_dinner(t_table *t)
 {
-	init_monitor_thread(t);
+	sleep(1);
 	t->start_time = get_curr_time_ms();
+	if (t->dinner_on == true)
+		printf("Dinner_status: ON\n");
+	else
+		printf("Dinner_status: OFF\n");
+	sleep(1);
+}
+
+void	wait_for_end(t_table *t)
+{
+	while (get_dinner_status(t))
+	{
+		usleep(50);
+	}
 }
 
 void	*monitor_life(void *table)
@@ -27,6 +40,8 @@ void	*monitor_life(void *table)
 	mutex_fct(&t->print_mtx, LOCK, t);
 	printf("Monitor thread started\n");
 	mutex_fct(&t->print_mtx, UNLOCK, t);
+	while (t->start_time == 0)
+		usleep(50);
 	while (get_dinner_status(t) && !meals_finished(t))
 	{
 		i = -1;
