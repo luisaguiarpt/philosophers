@@ -35,11 +35,11 @@ static void	check_values(t_table *t, int ac)
 	if (ac == 6 && t->meal_limit < 0)
 		exit_error(t, INV_MEAL);
 }
+
 /* 
  * Returns 1 if it's a valid INT, 0 if not
  * Saves value to result
  */
-
 static int	safe_atoi(char *str, int *result)
 {
 	long	nbr;

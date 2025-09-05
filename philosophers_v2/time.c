@@ -41,3 +41,13 @@ unsigned long	get_last_meal_start(t_philo *p)
 	pthread_mutex_unlock(&p->meal_mtx);
 	return (last_meal_start);
 }
+
+unsigned long	get_start_time(t_table *t)
+{
+	unsigned long	start_time;
+
+	mutex_fct(&t->time_mtx, LOCK, t);
+	start_time = t->start_time;
+	mutex_fct(&t->time_mtx, UNLOCK, t);
+	return (start_time);
+}

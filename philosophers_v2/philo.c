@@ -10,25 +10,37 @@ int	main(int ac, char **av)
 	init_philos(&t);
 	init_monitor_thread(&t);
 	start_dinner(&t);
+	wait_for_end(&t);
 }
 
 void	start_dinner(t_table *t)
 {
-	sleep(1);
-	t->start_time = get_curr_time_ms();
+	int				i;
+	unsigned long	start_time;
+
+	start_time = get_curr_time_ms();
+	i = -1;
+	while (++i < t->n_philos)
+		t->philos[i].last_meal_start = start_time;
+	t->start_time = start_time;
 	if (t->dinner_on == true)
 		printf("Dinner_status: ON\n");
 	else
 		printf("Dinner_status: OFF\n");
-	sleep(1);
 }
 
 void	wait_for_end(t_table *t)
 {
-	while (get_dinner_status(t))
-	{
+	int	i;
+
+	i = -1;
+	while (++i < t->n_philos)
+		pthread_detach(t->philos[i].tid);
+	while (get_dinner_status(t) == true)
 		usleep(50);
-	}
+	mutex_fct(&t->print_mtx, LOCK, t);
+	printf("Dinner is over\n");
+	mutex_fct(&t->print_mtx, UNLOCK, t);
 }
 
 void	*monitor_life(void *table)
@@ -58,8 +70,13 @@ void	*monitor_life(void *table)
 
 bool	has_starved(t_philo *p)
 {
-	if (get_elapsed_last_meal(p) > get_last_meal_start(p))
+	if (get_elapsed_last_meal(p) > (unsigned long)p->t->time_to_die * 1000)
+	{
+		mutex_fct(&p->t->print_mtx, LOCK, p->t);
+		printf("Philo %i has starved [elapsed: %lu]\n", p->id, get_elapsed_last_meal(p));
+		mutex_fct(&p->t->print_mtx, UNLOCK, p->t);
 		return (true);
+	}
 	return (false);
 }
 
@@ -71,10 +88,12 @@ void	*philo_life(void *philo)
 	mutex_fct(&p->t->print_mtx, LOCK, p->t);
 	printf("philosopher %d is born\n", p->id);
 	mutex_fct(&p->t->print_mtx, UNLOCK, p->t);
-	while (p->t->start_time == 0)
-		usleep(50);
-	p->last_meal_start = p->t->start_time;
-	while (get_dinner_status(p->t) && !meals_finished(p->t))
+	while (get_start_time(p->t) == 0)
+		usleep(10);
+	mutex_fct(&p->t->print_mtx, LOCK, p->t);
+	printf("philosopher %d is ready\n", p->id);
+	mutex_fct(&p->t->print_mtx, UNLOCK, p->t);
+	while (get_dinner_status(p->t) == true)
 	{
 		pick_up_forks(p);
 		eat(p);
@@ -87,8 +106,16 @@ void	*philo_life(void *philo)
 
 void	sleepy(t_philo *p)
 {
+	unsigned long	start;
+
 	print_msg(p, SLEEP);
-	usleep(p->t->time_to_sleep * 1000);
+	start = get_curr_time_ms();
+	while (get_curr_time_ms() - start < (unsigned long)p->t->time_to_sleep * 1000)
+	{
+		if (get_dinner_status(p->t) == false || meals_finished(p->t))
+			break;
+		usleep(50);
+	}
 }
 
 void	think(t_philo *p)
@@ -98,11 +125,19 @@ void	think(t_philo *p)
 
 void	eat(t_philo *p)
 {
+	unsigned long	start;
+
 	print_msg(p, EAT);
 	mutex_fct(&p->meal_mtx, LOCK, p->t);
-	p->last_meal_start = get_curr_time_ms();
+	start = get_curr_time_ms();
+	p->last_meal_start = start;
 	mutex_fct(&p->meal_mtx, UNLOCK, p->t);
-	usleep(p->t->time_to_eat * 1000	);
+	while (get_curr_time_ms() - start < (unsigned long)p->t->time_to_eat * 1000)
+	{
+		if (get_dinner_status(p->t) == false || meals_finished(p->t))
+			exit(0);
+		usleep(50);
+	}
 	mutex_fct(&p->meal_mtx, LOCK, p->t);
 	p->meals_eaten++;
 	mutex_fct(&p->meal_mtx, UNLOCK, p->t);
@@ -119,5 +154,7 @@ void	pick_up_forks(t_philo *p)
 void	put_down_forks(t_philo *p)
 {
 	mutex_fct(&p->fork1->mtxid, UNLOCK, p->t);
+	print_msg(p, FORKD);
 	mutex_fct(&p->fork2->mtxid, UNLOCK, p->t);
+	print_msg(p, FORKD);
 }

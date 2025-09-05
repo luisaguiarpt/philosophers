@@ -13,6 +13,8 @@ void	print_msg(t_philo *p, t_prt_code code)
 		printf("[%ld] %d died\n", get_elapsed(p->t), p->id);
 	if (code == FORK)
 		printf("[%ld] %d has picked up a fork\n", get_elapsed(p->t), p->id);
+	if (code == FORKD)
+		printf("[%ld] %d has put down up a fork\n", get_elapsed(p->t), p->id);
 	mutex_fct(&p->t->print_mtx, UNLOCK, p->t);
 
 }

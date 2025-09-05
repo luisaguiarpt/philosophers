@@ -23,6 +23,7 @@ typedef struct	s_table
 	unsigned long	start_time;
 	bool			dinner_on;
 	int				meals_finished;
+	pthread_mutex_t	time_mtx;
 	pthread_mutex_t	state_mtx;
 	pthread_mutex_t	print_mtx;
 	t_philo			*philos;
@@ -85,7 +86,8 @@ typedef enum	s_prt_code
 	SLEEP,
 	THINK,
 	DIE,
-	FORK
+	FORK,
+	FORKD
 }				t_prt_code;
 
 // Testing/Debug functions - debug.c
@@ -97,7 +99,7 @@ void		test_structs(t_table *t);
 void		prepare_philos(t_table *t);
 void		*philo_life(void *philo);
 void		start_dinner(t_table *t);
-void	wait_for_end(t_table *t);
+void		wait_for_end(t_table *t);
 void		*monitor_life(void *table);
 bool		has_starved(t_philo *p);
 void		*philo_life(void *philo);
@@ -112,6 +114,7 @@ unsigned long 	get_curr_time_ms(void);
 unsigned long 	get_elapsed(t_table *t);
 unsigned long	get_elapsed_last_meal(t_philo *p);
 unsigned long	get_last_meal_start(t_philo *p);
+unsigned long	get_start_time(t_table *t);
 
 // Initializer functions - init.c
 void			init_table(t_table *t);
