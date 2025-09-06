@@ -16,5 +16,4 @@ void	print_msg(t_philo *p, t_prt_code code)
 	if (code == FORKD)
 		printf("[%ld] %d has put down up a fork\n", get_elapsed(p->t), p->id);
 	mutex_fct(&p->t->print_mtx, UNLOCK, p->t);
-
 }

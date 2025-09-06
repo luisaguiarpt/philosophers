@@ -1,7 +1,7 @@
 CC=cc
 CLANG=clang
 FLAGS=-Wall -Wextra -Werror -pthread -g
-CLANGFLAGS=-Wall -Wextra -Werror -pthread -g -fsanitize=thread
+CLANGFLAGS=-Wall -Wextra -Werror -pthread -g -fsanitize=thread -O0 -fno-omit-frame-pointer
 
 SRCS=philo.c \
 	 parse.c \

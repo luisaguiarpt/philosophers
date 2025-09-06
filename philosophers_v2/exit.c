@@ -23,7 +23,20 @@ void	exit_error(t_table *t, t_exit_status err)
 		printf("Please input positive amount of philosophers\n");
 	else if (err == INV_MEAL)
 		printf("If you're setting a meal limit, please make it positive\n");
-//	free_forks(t);
-//	free_philos(t);
+	free_forks(t);
+	free_philos(t);
 	exit(err);
+}
+
+void	unlock_forks(t_table *t)
+{
+	int	i;
+	
+
+	i = -1;
+	while (++i < t->n_philos)
+	{
+
+		if (
+	}
 }

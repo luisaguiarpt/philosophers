@@ -10,6 +10,16 @@ bool	get_dinner_status(t_table *t)
 	return (status);
 }
 
+int	get_ready(t_table *t)
+{
+	int	ready;
+
+	mutex_fct(&t->state_mtx, LOCK, t);
+	ready = t->ready;
+	mutex_fct(&t->state_mtx, UNLOCK, t);
+	return (ready);
+}
+
 int	meals_finished(t_table *t)
 {
 	int	status;

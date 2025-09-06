@@ -23,6 +23,7 @@ typedef struct	s_table
 	unsigned long	start_time;
 	bool			dinner_on;
 	int				meals_finished;
+	int				ready;
 	pthread_mutex_t	time_mtx;
 	pthread_mutex_t	state_mtx;
 	pthread_mutex_t	print_mtx;
@@ -41,6 +42,7 @@ typedef struct	s_philo
 	t_table			*t;
 	t_fork			*fork1;
 	t_fork			*fork2;
+	int				held_forks;
 }				t_philo;
 
 typedef struct	s_fork
@@ -101,6 +103,7 @@ void		*philo_life(void *philo);
 void		start_dinner(t_table *t);
 void		wait_for_end(t_table *t);
 void		*monitor_life(void *table);
+bool		is_full(t_philo *p);
 bool		has_starved(t_philo *p);
 void		*philo_life(void *philo);
 void		eat(t_philo *p);
@@ -126,9 +129,12 @@ void			assign_forks(t_table *t, int i);
 bool			get_dinner_status(t_table *t);
 int				meals_finished(t_table *t);
 int				get_meals_eaten(t_philo *p);
+int				get_ready(t_table *t);
 
 // Setter functions - setters.c
 void			set_dinner_status_off(t_table *t);
+void			ready_philo(t_table *t);
+void			end_philo(t_table *t);
 
 // Utilities - utils.c
 void			*safe_calloc(size_t nmemb, size_t size, t_table *t);
