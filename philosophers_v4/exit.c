@@ -23,6 +23,8 @@ void	exit_error(t_table *t, t_exit_status err)
 		printf("Please input positive amount of philosophers\n");
 	else if (err == INV_MEAL)
 		printf("If you're setting a meal limit, please make it positive\n");
+	if (err == INV_N_PHILO)
+		exit(err);
 	free(t->forks);
 	free(t->philos);
 	exit(err);
@@ -32,14 +34,12 @@ void	unlock_forks(t_philo *p)
 {
 	if (p->fork1->locked == p->id)
 	{
-		mutex_fct(&p->fork1->mtxid, UNLOCK, p->t);
 		p->fork1->locked = 0;
-		printf("Unlocking fork %i [philo: %i]\n", p->fork1->id, p->id);
+		mutex_fct(&p->fork1->mtxid, UNLOCK, p->t);
 	}
 	if (p->fork2->locked == p->id)
 	{
-		mutex_fct(&p->fork2->mtxid, UNLOCK, p->t);
 		p->fork2->locked = 0;
-		printf("Unlocking fork %i [philo: %i]\n", p->fork2->id, p->id);
+		mutex_fct(&p->fork2->mtxid, UNLOCK, p->t);
 	}
 }

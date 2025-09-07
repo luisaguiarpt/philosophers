@@ -1,6 +1,10 @@
 #ifndef PHILO_H
 # define PHILO_H
 
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
+
 # include <pthread.h>	// pthread & pthread_mutex functions
 # include <stdio.h>		// printf
 # include <stdlib.h>	// malloc, free
@@ -24,6 +28,7 @@ typedef struct	s_table
 	bool			dinner_on;
 	int				meals_finished;
 	int				ready;
+	int				print;
 	pthread_mutex_t	time_mtx;
 	pthread_mutex_t	state_mtx;
 	pthread_mutex_t	print_mtx;
@@ -98,7 +103,7 @@ typedef enum	s_prt_code
 void		test_parse(t_table *t);
 void		test_times(t_table *t);
 void		test_structs(t_table *t);
-void	print_fork(t_table *t, t_fork *f, t_prt_code code);
+void	print_fork(t_philo *p, t_fork *f, t_prt_code code);
 
 // Dinner related functions - philo.c
 void		prepare_philos(t_table *t);
@@ -114,6 +119,7 @@ void		pick_up_forks(t_philo *p);
 void		put_down_forks(t_philo *p);
 void		sleepy(t_philo *p);
 void		think(t_philo *p);
+void		one_philo(t_table *t);
 
 // Time related functions - time.c
 unsigned long 	get_curr_time_ms(void);
@@ -135,7 +141,7 @@ int				get_meals_eaten(t_philo *p);
 int				get_ready(t_table *t);
 
 // Setter functions - setters.c
-void			set_dinner_status_off(t_table *t);
+void			set_dinner_status_off(t_table *t, t_philo *p, int cause);
 void			ready_philo(t_table *t);
 void			end_philo(t_table *t);
 

@@ -6,6 +6,7 @@ void	init_table(t_table *t)
 	t->meals_finished = 0;
 	t->start_time = 0;
 	t->ready = 0;
+	t->print = 1;
 	mutex_fct(&t->state_mtx, INIT, t);
 	mutex_fct(&t->print_mtx, INIT, t);
 	mutex_fct(&t->time_mtx, INIT, t);
@@ -47,15 +48,24 @@ void	assign_forks(t_table *t, int i)
 {
 	if (i % 2 == 0)
 	{
-		sleep(1);
 		t->philos[i].fork1 = &t->forks[i];
 		t->philos[i].fork2 = &t->forks[(i + 1) % t->n_philos];
-		printf("Philo %i has fork %i and %i\n", t->philos[i].id, i, (i + 1) % t->n_philos);
+		if (DEBUG)
+		{
+			mutex_fct(&t->print_mtx, LOCK, t);
+			printf("Philo %i has fork %i and %i\n", t->philos[i].id, i, (i + 1) % t->n_philos);
+			mutex_fct(&t->print_mtx, UNLOCK, t);
+		}
 	}
 	else
 	{
 		t->philos[i].fork1 = &t->forks[(i + 1) % t->n_philos];
 		t->philos[i].fork2 = &t->forks[i];
-		printf("Philo %i has fork %i and %i\n", t->philos[i].id, i, (i + 1) % t->n_philos);
+		if (DEBUG)
+		{
+			mutex_fct(&t->print_mtx, LOCK, t);
+			printf("Philo %i has fork %i and %i\n", t->philos[i].id, i, (i + 1) % t->n_philos);
+			mutex_fct(&t->print_mtx, UNLOCK, t);
+		}
 	}
 }
