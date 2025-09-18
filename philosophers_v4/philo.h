@@ -47,6 +47,7 @@ typedef struct	s_philo
 	t_table			*t;
 	t_fork			*fork1;
 	t_fork			*fork2;
+	int				forks[2];
 }				t_philo;
 
 typedef struct	s_fork

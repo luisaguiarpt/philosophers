@@ -23,6 +23,8 @@ void	init_philos(t_table *t)
 		t->philos[i].id = i + 1;
 		t->philos[i].t = t;
 		t->philos[i].meals_eaten = 0;
+		t->philos[i].forks[0] = 0;
+		t->philos[i].forks[1] = 0;
 		assign_forks(t, i);
 		mutex_fct(&t->philos[i].meal_mtx, INIT, t);
 	}

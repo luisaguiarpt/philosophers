@@ -127,11 +127,13 @@ void	pick_up_forks(t_philo *p)
 		return ;
 	mutex_fct(&p->fork1->mtxid, LOCK, p->t);
 	p->fork1->locked = p->id;
+	p->forks[0] = 1;
 	print_msg(p, FORK);
 	if (get_dinner_status(p->t) == false)
 		return ;
 	mutex_fct(&p->fork2->mtxid, LOCK, p->t);
 	p->fork2->locked = p->id;
+	p->forks[1] = 1;
 	print_msg(p, FORK);
 }
 
@@ -159,7 +161,7 @@ void	eat(t_philo *p)
 
 void	put_down_forks(t_philo *p)
 {
-	if (get_dinner_status(p->t) == false)
+	if (get_dinner_status(p->t) == false && p->forks[0] == 0 && p->forks[1] == 0)
 		return ;
 	mutex_fct(&p->fork1->mtxid, UNLOCK, p->t);
 	p->fork1->locked = 0;
