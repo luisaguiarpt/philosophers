@@ -35,6 +35,7 @@ typedef struct	s_table
 	t_philo			*philos;
 	t_fork			*forks;
 	pthread_t		monitor_tid;
+	pthread_t		monitor_tid2;
 }				t_table;
 
 typedef struct	s_philo
@@ -112,7 +113,8 @@ void		prepare_philos(t_table *t);
 void		*philo_life(void *philo);
 void		start_dinner(t_table *t);
 void		wait_for_end(t_table *t);
-void		*monitor_life(void *table);
+void		*monitor_life1(void *table);
+void		*monitor_life2(void *table);
 bool		is_full(t_philo *p);
 bool		has_starved(t_philo *p);
 void		*philo_life(void *philo);
@@ -156,6 +158,7 @@ void			parse(t_table *t, int ac, char **av);
 
 // Printing - printers.c
 void			print_msg(t_philo *p, t_prt_code code);
+void			print_msg2(t_philo *p, char *msg);
 
 // Thread functions utils - threads.c
 void			mutex_fct(pthread_mutex_t *mtxid, t_mtx_code code, t_table *t);
@@ -165,5 +168,6 @@ void			init_monitor_thread(t_table *t);
 // Exiting - exit.c
 void			exit_error(t_table *t, t_exit_status err);
 void			unlock_forks(t_philo *p);
+void			destroy_mtx(t_table *t);
 
 #endif

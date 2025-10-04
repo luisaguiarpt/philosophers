@@ -29,7 +29,10 @@ void	init_philo_thread(t_philo *p)
 void	init_monitor_thread(t_table *t)
 {
 	int	ret;
-	ret = pthread_create(&t->monitor_tid, NULL, monitor_life, t);
+	ret = pthread_create(&t->monitor_tid, NULL, monitor_life1, t);
+	if (ret)
+		exit_error(t, PTHREAD_MONITOR);
+	ret = pthread_create(&t->monitor_tid2, NULL, monitor_life2, t);
 	if (ret)
 		exit_error(t, PTHREAD_MONITOR);
 }

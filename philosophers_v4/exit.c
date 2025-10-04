@@ -47,3 +47,19 @@ void	unlock_forks(t_philo *p)
 	}
 	mutex_fct(&p->fork2->lock_mtx, UNLOCK, p->t);
 }
+
+void	destroy_mtx(t_table *t)
+{
+	int	i;
+
+	i = -1;
+	while (++i < t->n_philos)
+	{
+		mutex_fct(&t->philos[i].meal_mtx, DESTROY, t);
+		mutex_fct(&t->forks[i].mtxid, DESTROY, t);
+		mutex_fct(&t->forks[i].lock_mtx, DESTROY, t);
+		mutex_fct(&t->state_mtx, DESTROY, t);
+		mutex_fct(&t->time_mtx, DESTROY, t);
+		mutex_fct(&t->print_mtx, DESTROY, t);
+	}
+}

@@ -13,12 +13,23 @@ void	print_msg(t_philo *p, t_prt_code code)
 		printf("[%ld] %d is thinking\n", get_elapsed(p->t), p->id);
 	if (code == DIE)
 	{
-		printf("[%ld] %d died\n", get_elapsed(p->t), p->id);
 		p->t->print = 0;
+		printf("[%ld] %d died\n", get_elapsed(p->t), p->id);
 	}
 	if (code == FORK)
 		printf("[%ld] %d has picked up a fork\n", get_elapsed(p->t), p->id);
 	if (code == FORKD)
 		printf("[%ld] %d has put down up a fork\n", get_elapsed(p->t), p->id);
+	mutex_fct(&p->t->print_mtx, UNLOCK, p->t);
+}
+
+void	print_msg2(t_philo *p, char *msg)
+{
+	if (!p->t->print)
+		return ;
+	mutex_fct(&p->t->print_mtx, LOCK, p->t);
+	if (*msg == 'd')
+		p->t->print = 0;
+	printf("[%ld] %d %s\n", get_elapsed(p->t), p->id, msg);
 	mutex_fct(&p->t->print_mtx, UNLOCK, p->t);
 }
