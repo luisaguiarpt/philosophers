@@ -54,6 +54,7 @@ typedef struct	s_fork
 {
 	int				id;
 	pthread_mutex_t	mtxid;
+	pthread_mutex_t	lock_mtx;
 	int				locked;
 }				t_fork;
 
@@ -123,6 +124,7 @@ void		think(t_philo *p);
 void		one_philo(t_table *t);
 
 // Time related functions - time.c
+void			precise_usleep(unsigned long ms);
 unsigned long 	get_curr_time_ms(void);
 unsigned long 	get_elapsed(t_table *t);
 unsigned long	get_elapsed_last_meal(t_philo *p);

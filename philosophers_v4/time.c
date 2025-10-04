@@ -1,5 +1,14 @@
 #include "philo.h"
 
+void	precise_usleep(unsigned long ms)
+{
+	long	start;
+	
+	start = get_curr_time_ms();
+	while (get_curr_time_ms() - start < ms)
+		usleep(500);
+}
+
 unsigned long 	get_curr_time_ms(void)
 {
 	struct timeval	tv_curr;
@@ -25,8 +34,8 @@ unsigned long	get_elapsed_last_meal(t_philo *p)
 	unsigned long 	current;
 	unsigned long 	time_since_last_meal;
 
-	current = get_curr_time_ms();
 	pthread_mutex_lock(&p->meal_mtx);
+	current = get_curr_time_ms();
 	time_since_last_meal = current - p->last_meal_start;
 	pthread_mutex_unlock(&p->meal_mtx);
 	return (time_since_last_meal);

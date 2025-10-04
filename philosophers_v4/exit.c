@@ -32,14 +32,18 @@ void	exit_error(t_table *t, t_exit_status err)
 
 void	unlock_forks(t_philo *p)
 {
+	mutex_fct(&p->fork1->lock_mtx, LOCK, p->t);
 	if (p->fork1->locked == p->id)
 	{
 		p->fork1->locked = 0;
 		mutex_fct(&p->fork1->mtxid, UNLOCK, p->t);
 	}
+	mutex_fct(&p->fork1->lock_mtx, UNLOCK, p->t);
+	mutex_fct(&p->fork2->lock_mtx, LOCK, p->t);
 	if (p->fork2->locked == p->id)
 	{
 		p->fork2->locked = 0;
 		mutex_fct(&p->fork2->mtxid, UNLOCK, p->t);
 	}
+	mutex_fct(&p->fork2->lock_mtx, UNLOCK, p->t);
 }

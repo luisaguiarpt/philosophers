@@ -42,6 +42,7 @@ void	init_forks(t_table *t)
 	while (++i < t->n_philos)
 	{
 		mutex_fct(&t->forks[i].mtxid, INIT, t);
+		mutex_fct(&t->forks[i].lock_mtx, INIT, t);
 		t->forks[i].id = i;
 	}
 }

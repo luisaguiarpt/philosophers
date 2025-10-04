@@ -1,0 +1,15 @@
+Step 1: Argument parsing + simple main printing args.
+Step 2: Implement time utils (get_time_ms, elapsed).
+Step 3: Allocate table, forks, philosophers; init mutexes.
+Step 4: Create threads that just loop printing their id and exit (sanity).
+Step 5: Add fork locking + immediate unlock—test for deadlocks by running long (no eating logic yet).
+Step 6: Implement ordered fork acquisition (parity or index).
+Step 7: Add eating cycle (take forks, eat, release) only (no sleep/think).
+Step 8: Add last_meal_ms & monitor thread that detects only death (with large time_to_die so you can test).
+Step 9: Add sleeping & thinking states.
+Step 10: Add must_eat logic and stop on completion.
+Step 11: Add single philosopher branch & test.
+Step 12: Add print mutex & ensure no prints after death/completion.
+Step 13: Stress test with small times (e.g., 5 300 100 100).
+Step 14: Memory / leak test (valgrind if allowed) and run many iterations.
+Step 15: Code cleanup, refactor into logically separated files (parsing.c, time.c, philo.c, monitor.c, actions.c, utils.c).
