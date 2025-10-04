@@ -6,7 +6,9 @@ void	precise_usleep(unsigned long ms)
 	
 	start = get_curr_time_ms();
 	while (get_curr_time_ms() - start < ms)
+	{
 		usleep(500);
+	}
 }
 
 unsigned long 	get_curr_time_ms(void)

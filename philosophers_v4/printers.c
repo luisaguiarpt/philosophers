@@ -25,9 +25,12 @@ void	print_msg(t_philo *p, t_prt_code code)
 
 void	print_msg2(t_philo *p, char *msg)
 {
-	if (!p->t->print)
-		return ;
 	mutex_fct(&p->t->print_mtx, LOCK, p->t);
+	if (!p->t->print)
+	{
+		mutex_fct(&p->t->print_mtx, UNLOCK, p->t);
+		return ;
+	}
 	if (*msg == 'd')
 		p->t->print = 0;
 	printf("[%ld] %d %s\n", get_elapsed(p->t), p->id, msg);

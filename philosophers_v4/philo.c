@@ -38,10 +38,12 @@ void	start_dinner(t_table *t)
 	start_time = get_curr_time_ms();
 	i = -1;
 	while (++i < t->n_philos)
+	{
+		mutex_fct(&t->philos[i].meal_mtx, LOCK, t);
 		t->philos[i].last_meal_start = start_time;
-	mutex_fct(&t->time_mtx, LOCK, t);
+		mutex_fct(&t->philos[i].meal_mtx, UNLOCK, t);
+	}
 	t->start_time = start_time;
-	mutex_fct(&t->time_mtx, UNLOCK, t);
 }
 
 void	wait_for_end(t_table *t)
@@ -123,7 +125,7 @@ bool	is_full(t_philo *p)
 
 bool	has_starved(t_philo *p)
 {
-	if (get_elapsed_last_meal(p) > (unsigned long)p->t->time_to_die)
+	if (get_elapsed_last_meal(p) >= (unsigned long)p->t->time_to_die)
 		return (true);
 	return (false);
 }
@@ -172,10 +174,10 @@ void	eat(t_philo *p)
 {
 	if (get_dinner_status(p->t) == false)
 		return ;
-	print_msg2(p, "is eating");
 	mutex_fct(&p->meal_mtx, LOCK, p->t);
 	p->last_meal_start = get_curr_time_ms();
 	mutex_fct(&p->meal_mtx, UNLOCK, p->t);
+	print_msg2(p, "is eating");
 	precise_usleep((unsigned long)p->t->time_to_eat);
 	mutex_fct(&p->meal_mtx, LOCK, p->t);
 	p->meals_eaten++;
