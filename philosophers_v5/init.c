@@ -1,0 +1,64 @@
+#include "philo.h"
+
+void	init_table(t_table *t)
+{
+	t->dinner_on = true;
+	t->meals_finished = 0;
+	t->start_time = 0;
+	t->ready = 0;
+	t->print = 1;
+	mutex_fct(&t->state_mtx, INIT, t);
+	mutex_fct(&t->print_mtx, INIT, t);
+	mutex_fct(&t->time_mtx, INIT, t);
+}
+
+void	init_philos(t_table *t)
+{
+	int	i;
+
+	t->philos = safe_calloc(t->n_philos, sizeof(t_philo), t);
+	i = -1;
+	while (++i < t->n_philos)
+	{
+		t->philos[i].id = i + 1;
+		t->philos[i].t = t;
+		t->philos[i].meals_eaten = 0;
+		t->philos[i].forks[0] = 0;
+		t->philos[i].forks[1] = 0;
+		t->philos[i].dead = 0;
+		assign_forks(t, i);
+		mutex_fct(&t->philos[i].meal_mtx, INIT, t);
+		mutex_fct(&t->philos[i].dead_mtx, INIT, t);
+	}
+	i = -1;
+	while (++i < t->n_philos)
+		init_philo_thread(&t->philos[i]);
+}
+
+void	init_forks(t_table *t)
+{
+	int	i;
+
+	t->forks = safe_calloc(t->n_philos, sizeof(t_fork), t);
+	i = -1;
+	while (++i < t->n_philos)
+	{
+		mutex_fct(&t->forks[i].mtxid, INIT, t);
+		mutex_fct(&t->forks[i].lock_mtx, INIT, t);
+		t->forks[i].id = i;
+	}
+}
+
+void	assign_forks(t_table *t, int i)
+{
+	if (i % 2 == 0)
+	{
+		t->philos[i].fork1 = &t->forks[i];
+		t->philos[i].fork2 = &t->forks[(i + 1) % t->n_philos];
+	}
+	else
+	{
+		t->philos[i].fork1 = &t->forks[(i + 1) % t->n_philos];
+		t->philos[i].fork2 = &t->forks[i];
+	}
+}
