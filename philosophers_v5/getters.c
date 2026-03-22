@@ -18,7 +18,6 @@ bool	check_dead(t_philo *p)
 	dead = p->dead;
 	mutex_fct(&t->dead_mtx, UNLOCK, t);
 	return (dead);
-
 }
 
 int	get_ready(t_table *t)

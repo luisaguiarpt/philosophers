@@ -77,7 +77,7 @@ void	*monitor_life1(void *table)
 		i = -1;
 		while (++i < t->n_philos)
 		{
-			if (cheak_dead(&t->philos[i]))
+			if (check_dead(&t->philos[i]))
 				set_dinner_status_off(t, &t->philos[i], 0);
 		}
 		usleep(time);

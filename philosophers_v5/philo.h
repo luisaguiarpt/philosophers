@@ -60,7 +60,7 @@ typedef struct	s_fork
 	int				locked;
 }				t_fork;
 
-typedef enum e_exit_status
+typedef enum e_error
 {
 	SUCCESS,
 	NOARGS,
@@ -75,7 +75,7 @@ typedef enum e_exit_status
 	PTHREAD_PHILO,
 	MUTEX_FAIL,
 	PTHREAD_MONITOR
-}				t_exit_status;
+}				t_error;
 
 typedef enum	e_mtx_code
 {
