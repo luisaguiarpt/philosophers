@@ -4,7 +4,6 @@ static int	init_table(t_table *table)
 {
 	int	exit_code;
 
-	table->start_time = 0;
 	table->dinner_finished = false;
 	exit_code = pthread_mutex_init(&table->write, NULL);
 	if (exit_code)
@@ -12,6 +11,7 @@ static int	init_table(t_table *table)
 	exit_code = pthread_mutex_init(&table->state, NULL);
 	if (exit_code)
 		return (exit_code);
+	table->start_time = 0;
 	return (0);
 }
 
@@ -49,9 +49,17 @@ static int	init_philos(t_table *table)
 	{
 		table->philos[i].id = i + 1;
 		table->philos[i].meals_eaten = 0;
-		table->philos[i].last_meal_end = 0;
-		table->philos[i].fork1 = &table->forks[i];
-		table->philos[i].fork1 = &table->forks[(i + 1) % table->nr_philos];
+		table->philos[i].last_meal = table->start_time;
+		if (i % 2 == 0)
+		{
+			table->philos[i].fork1 = &table->forks[i];
+			table->philos[i].fork2 = &table->forks[(i + 1) % table->nr_philos];
+		}
+		else
+		{
+			table->philos[i].fork2 = &table->forks[i];
+			table->philos[i].fork1 = &table->forks[(i + 1) % table->nr_philos];
+		}
 		table->philos[i].table = table;
 		i++;
 	}
@@ -68,6 +76,7 @@ int	init(t_table *table)
 	exit_code = init_forks(table);
 	if (exit_code)
 		return (exit_code);
+	table->start_time = get_curr_time_ms();
 	exit_code = init_philos(table);
 	if (exit_code)
 		return (exit_code);

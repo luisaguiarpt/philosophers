@@ -7,6 +7,10 @@ DEBUGFLAG=-DDEBUG=1
 SRCS=main.c \
 	 parse.c \
 	 init.c \
+	 simulation.c \
+	 simulation_utils.c \
+	 printers.c \
+	 time.c \
 	 exit.c \
 	 utils.c
 
