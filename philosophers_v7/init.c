@@ -22,6 +22,9 @@ static int	init_forks(t_table *table)
 	table->forks = malloc(table->nr_philos * sizeof(pthread_mutex_t));
 	if (!table->forks)
 		return (MALLOC_FAIL);
+	table->free_forks = malloc(table->nr_philos * sizeof(bool));
+	if (!table->free_forks)
+		return (MALLOC_FAIL);
 	i = 0;
 	while (i < table->nr_philos)
 	{
@@ -31,9 +34,33 @@ static int	init_forks(t_table *table)
 			destroy_forks(table, i);
 			return (MUTEX_FAIL);
 		}
+		table->free_forks[i] = true;
 		i++;
 	}
 	return (0);
+}
+
+static void	assign_forks(t_table *table, int i)
+{
+	int	fork_a;
+	int	fork_b;
+
+	fork_a = i;
+	fork_b = (i + 1) % table->nr_philos;
+	if (i % 2 == 0)
+	{
+		table->philos[i].fork1_free = &table->free_forks[fork_a];
+		table->philos[i].fork2_free = &table->free_forks[fork_b];
+		table->philos[i].fork1 = &table->forks[fork_a];
+		table->philos[i].fork2 = &table->forks[fork_b];
+	}
+	else
+	{
+		table->philos[i].fork1_free = &table->free_forks[fork_b];
+		table->philos[i].fork2_free = &table->free_forks[fork_a];
+		table->philos[i].fork1 = &table->forks[fork_b];
+		table->philos[i].fork2 = &table->forks[fork_a];
+	}
 }
 
 static int	init_philos(t_table *table)
@@ -49,17 +76,8 @@ static int	init_philos(t_table *table)
 		table->philos[i].id = i + 1;
 		table->philos[i].meals_eaten = 0;
 		table->philos[i].last_meal = table->start_time;
-		if (i % 2 == 0)
-		{
-			table->philos[i].fork1 = &table->forks[i];
-			table->philos[i].fork2 = &table->forks[(i + 1) % table->nr_philos];
-		}
-		else
-		{
-			table->philos[i].fork1 = &table->forks[(i + 1) % table->nr_philos];
-			table->philos[i].fork2 = &table->forks[i];
-		}
 		table->philos[i].table = table;
+		assign_forks(table, i);
 		i++;
 	}
 	return (0);
