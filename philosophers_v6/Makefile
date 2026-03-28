@@ -8,6 +8,7 @@ SRCS=main.c \
 	 parse.c \
 	 init.c \
 	 simulation.c \
+	 simulation_actions.c \
 	 simulation_utils.c \
 	 printers.c \
 	 time.c \

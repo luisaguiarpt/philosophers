@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ldias-da <ldias-da@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/28 15:40:36 by ldias-da          #+#    #+#             */
+/*   Updated: 2026/03/28 15:40:41 by ldias-da         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -52,46 +64,48 @@ typedef enum e_error
 	INV_MEAL
 }				t_error;
 
-void	one_philo(t_table *t);
+void			one_philo(t_table *t);
 
 // parse.c - Input parsing
-int		parse(t_table *table, int ac, char **av);
+int				parse(t_table *table, int ac, char **av);
 
 // init.c - Initializers
-int		init(t_table *table);
+int				init(t_table *table);
 
 // simulation.c - Main sim functions
-int		run_simulation(t_table *table);
-void	*monitor_life(void *_table);
-void	*philo_life(void *_philo);
-void	eat(t_philo *philo);
-void	sleepy(t_philo *philo);
-void	think(t_philo *philo);
+int				run_simulation(t_table *table);
+void			*monitor_life(void *_table);
+void			*philo_life(void *_philo);
+void			eat(t_philo *philo);
+void			sleepy(t_philo *philo);
+void			think(t_philo *philo);
 
 // simulation_utils.c - Sim helpers
-bool	dinner_ongoing(t_table *table);
-bool	is_dead(t_philo *philo);
-bool	is_full(t_philo *philo);
-bool	all_full(t_table *table, int full_philos);
+bool			dinner_ongoing(t_table *table);
+bool			is_dead(t_philo *philo);
+bool			is_full(t_philo *philo);
+bool			all_full(t_table *table, int full_philos);
 
 // printers.c - Printing with mutex
-void	print_death(t_philo *philo);
-void	print_fork(t_philo *philo);
-void	print_eating(t_philo *philo);
-void	print_sleeping(t_philo *philo);
-void	print_thinking(t_philo *philo);
-void	print_fork_down(t_philo *philo);
+void			print_death(t_philo *philo);
+void			print_fork(t_philo *philo);
+void			print_eating(t_philo *philo);
+void			print_sleeping(t_philo *philo);
+void			print_thinking(t_philo *philo);
 
 // time.c - Time related functions
-void	precise_usleep(unsigned long ms);
 unsigned long	get_curr_time_ms(void);
 unsigned long	get_elapsed(t_table *t);
+void			precise_usleep(unsigned long ms);
 
 // utils.c - Utils
-bool	is_error(t_error error_code);
-int		print_msg(t_error err);
+bool			is_error(t_error error_code);
+int				print_msg(t_error err);
+void			ft_putstr_fd(char *s, int fd);
+void			ft_putnbr_fd(int n, int fd);
 
 // exit.c - Exit functions
-void	destroy_forks(t_table *table, int end);
+void			destroy_forks(t_table *table, int end);
+void			cleanup(t_table *table);
 
 #endif

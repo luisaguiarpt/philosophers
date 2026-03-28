@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ldias-da <ldias-da@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/28 15:41:06 by ldias-da          #+#    #+#             */
+/*   Updated: 2026/03/28 15:41:07 by ldias-da         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static char	*get_sign(char *str, int *sign);
@@ -7,21 +19,21 @@ static int	check_values(t_table *t, int ac);
 int	parse(t_table *table, int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
-		return(NOARGS);
+		return (NOARGS);
 	if (ac == 5)
 		table->meal_limit = -1;
 	if (!safe_atoi(av[1], &table->nr_philos))
-		return(INV_VALUE);
+		return (INV_VALUE);
 	if (!safe_atoi(av[2], &table->time_to_die))
-		return(INV_VALUE);
+		return (INV_VALUE);
 	if (!safe_atoi(av[3], &table->time_to_eat))
-		return(INV_VALUE);
+		return (INV_VALUE);
 	if (!safe_atoi(av[4], &table->time_to_sleep))
-		return(INV_VALUE);
+		return (INV_VALUE);
 	if (ac == 6)
 	{
 		if (!safe_atoi(av[5], &table->meal_limit))
-			return(INV_VALUE);
+			return (INV_VALUE);
 	}
 	return (check_values(table, ac));
 }
@@ -29,13 +41,13 @@ int	parse(t_table *table, int ac, char **av)
 static int	check_values(t_table *t, int ac)
 {
 	if (t->time_to_die < 0 || t->time_to_eat < 0 || t->time_to_sleep < 0)
-		return(NEG_TIME);
+		return (NEG_TIME);
 	if (t->nr_philos <= 0)
-		return(INV_N_PHILO);
+		return (INV_N_PHILO);
 	if (t->nr_philos == 1)
 		one_philo(t);
 	if (ac == 6 && t->meal_limit < 0)
-		return(INV_MEAL);
+		return (INV_MEAL);
 	return (0);
 }
 
@@ -87,4 +99,3 @@ static char	*get_sign(char *str, int *sign)
 		*sign = 0;
 	return (&str[i]);
 }
-
