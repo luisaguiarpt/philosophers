@@ -28,9 +28,9 @@ void	print_fork(t_philo *philo)
 {
 	unsigned long	elapsed;
 
+	elapsed = get_elapsed(philo->table);
 	if (!dinner_ongoing(philo->table))
 		return ;
-	elapsed = get_elapsed(philo->table);
 	pthread_mutex_lock(&philo->table->write);
 	ft_putnbr_fd(elapsed, 1);
 	write(1, " ", 1);
@@ -43,9 +43,9 @@ void	print_eating(t_philo *philo)
 {
 	unsigned long	elapsed;
 
+	elapsed = get_elapsed(philo->table);
 	if (!dinner_ongoing(philo->table))
 		return ;
-	elapsed = get_elapsed(philo->table);
 	pthread_mutex_lock(&philo->table->write);
 	ft_putnbr_fd(elapsed, 1);
 	write(1, " ", 1);
@@ -58,9 +58,9 @@ void	print_sleeping(t_philo *philo)
 {
 	unsigned long	elapsed;
 
+	elapsed = get_elapsed(philo->table);
 	if (!dinner_ongoing(philo->table))
 		return ;
-	elapsed = get_elapsed(philo->table);
 	pthread_mutex_lock(&philo->table->write);
 	ft_putnbr_fd(elapsed, 1);
 	write(1, " ", 1);
@@ -73,9 +73,9 @@ void	print_thinking(t_philo *philo)
 {
 	unsigned long	elapsed;
 
+	elapsed = get_elapsed(philo->table);
 	if (!dinner_ongoing(philo->table))
 		return ;
-	elapsed = get_elapsed(philo->table);
 	pthread_mutex_lock(&philo->table->write);
 	ft_putnbr_fd(elapsed, 1);
 	write(1, " ", 1);

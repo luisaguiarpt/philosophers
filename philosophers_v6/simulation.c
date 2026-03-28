@@ -54,7 +54,7 @@ void	*philo_life(void *vphilo)
 			break ;
 		think(philo);
 		if (!(philo->id % 2))
-			usleep(2000);
+			usleep(1000);
 	}
 	return (NULL);
 }
