@@ -42,7 +42,7 @@ void	*philo_life(void *vphilo)
 	t_philo	*philo;
 
 	philo = (t_philo *)vphilo;
-	if (!(philo->id % 2))
+	if (philo->id % 2)
 		usleep(1000);
 	while (dinner_ongoing(philo->table))
 	{
@@ -53,8 +53,8 @@ void	*philo_life(void *vphilo)
 		if (!dinner_ongoing(philo->table))
 			break ;
 		think(philo);
-		if (philo->id % 2)
-			usleep(1000);
+		if (!(philo->id % 2))
+			usleep(2000);
 	}
 	return (NULL);
 }

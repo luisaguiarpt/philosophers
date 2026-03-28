@@ -32,7 +32,7 @@ void	eat(t_philo *philo)
 void	sleepy(t_philo *philo)
 {
 	print_sleeping(philo);
-	precise_usleep(philo->table->time_to_sleep);
+	precise_usleep((unsigned long)philo->table->time_to_sleep);
 }
 
 void	think(t_philo *philo)
